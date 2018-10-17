@@ -308,14 +308,7 @@ export default class Slider extends PureComponent {
           style={[mainStyles.track, trackStyle, defaultMinimumTrackStyle, minimumTrackStyle]}
         />
         {this._renderThumb(thumbTintColor, mainStyles, thumbLeft, thumbStyle, valueVisibleStyle)}
-        <View
-          renderToHardwareTextureAndroid
-          style={[defaultStyles.touchArea, touchOverflowStyle]}
-          {...this._panResponder.panHandlers}
-        >
-          {debugTouchArea === true &&
-            this._renderDebugThumbTouchRect(minimumTrackWidth)}
-        </View>
+        {this._renderPanResponder(touchOverflowStyle, debugTouchArea, minimumTrackWidth)}
       </View>
     );
   }
@@ -587,6 +580,23 @@ export default class Slider extends PureComponent {
       );
     }
   }
+
+  _renderPanResponder = (touchOverflowStyle, debugTouchArea, minimumTrackWidth) => {
+    if (this.props.hideThumb) {
+      return null;
+    } else {
+      return (
+        <View
+          renderToHardwareTextureAndroid
+          style={[defaultStyles.touchArea, touchOverflowStyle]}
+          {...this._panResponder.panHandlers}
+          >
+          {debugTouchArea === true &&
+            this._renderDebugThumbTouchRect(minimumTrackWidth)}
+          </View>
+      );
+    };
+  };
 
   _renderThumbImage = () => {
     const { thumbImage } = this.props;
