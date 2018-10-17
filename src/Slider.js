@@ -177,6 +177,11 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig: PropTypes.object,
+
+    /**
+     * Used to hide the thumb from slider
+     */
+    hideThumb: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -192,6 +197,7 @@ export default class Slider extends PureComponent {
     thumbTouchSize: { width: 40, height: 40 },
     debugTouchArea: false,
     animationType: 'timing',
+    hideThumb: false,
   };
 
   state = {
@@ -301,21 +307,7 @@ export default class Slider extends PureComponent {
           renderToHardwareTextureAndroid
           style={[mainStyles.track, trackStyle, defaultMinimumTrackStyle, minimumTrackStyle]}
         />
-        <Animated.View
-          onLayout={this._measureThumb}
-          renderToHardwareTextureAndroid
-          style={[
-            { backgroundColor: thumbTintColor },
-            mainStyles.thumb,
-            thumbStyle,
-            {
-              transform: [{ translateX: thumbLeft }, { translateY: 0 }],
-              ...valueVisibleStyle,
-            },
-          ]}
-        >
-          {this._renderThumbImage()}
-        </Animated.View>
+        {this._renderThumb(thumbTintColor, mainStyles, thumbLeft, thumbStyle, valueVisibleStyle)}
         <View
           renderToHardwareTextureAndroid
           style={[defaultStyles.touchArea, touchOverflowStyle]}
@@ -571,6 +563,30 @@ export default class Slider extends PureComponent {
       />
     );
   };
+
+  _renderThumb(thumbTintColor, mainStyles, thumbLeft, thumbStyle, valueVisibleStyle) {
+    if (this.props.hideThumb) {
+      return null;
+    } else {
+      return (
+        <Animated.View
+          onLayout={this._measureThumb}
+          renderToHardwareTextureAndroid
+          style={[
+            { backgroundColor: thumbTintColor },
+            mainStyles.thumb,
+            thumbStyle,
+            {
+              transform: [{ translateX: thumbLeft }, { translateY: 0 }],
+              ...valueVisibleStyle,
+            },
+          ]}
+        >
+          {this._renderThumbImage()}
+        </Animated.View>
+      );
+    }
+  }
 
   _renderThumbImage = () => {
     const { thumbImage } = this.props;

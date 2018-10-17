@@ -97,6 +97,7 @@ debugTouchArea        | bool     | Yes      | false                     | Set th
 animateTransitions    | bool     | Yes      | false                     | Set to true if you want to use the default 'spring' animation
 animationType         | string   | Yes      | 'timing'                  | Set to 'spring' or 'timing' to use one of those two types of animations with the default [animation properties](https://facebook.github.io/react-native/docs/animations.html).
 animationConfig       | object   | Yes      | undefined                 | Used to configure the animation parameters.  These are the same parameters in the [Animated library](https://facebook.github.io/react-native/docs/animations.html).
+hideThumb             | bool   | Yes      | false                 | Used to hide the thumb from slider
 
 
 ---
