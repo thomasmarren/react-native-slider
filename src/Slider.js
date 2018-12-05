@@ -9,6 +9,7 @@ import {
   Easing,
   ViewPropTypes,
   I18nManager,
+  Text,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -159,6 +160,16 @@ export default class Slider extends PureComponent {
     thumbImage: Image.propTypes.source,
 
     /**
+     * Sets a component for the thumb.
+     */
+    thumbComponent: Image.propTypes.source,
+
+    /**
+     * Sets a label above the thumb
+     */
+    hoverLabel: PropTypes.string,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -198,6 +209,7 @@ export default class Slider extends PureComponent {
     debugTouchArea: false,
     animationType: 'timing',
     hideThumb: false,
+    hoverLabel: null,
   };
 
   state = {
@@ -242,6 +254,8 @@ export default class Slider extends PureComponent {
       maximumTrackTintColor,
       thumbTintColor,
       thumbImage,
+      thumbComponent,
+      hoverLabel,
       styles,
       style,
       trackStyle,
@@ -557,6 +571,11 @@ export default class Slider extends PureComponent {
     );
   };
 
+  _renderHoverLabel = () => {
+    if (!this.props.hoverLabel) return null
+    return <Text style={{marginTop: -30, paddingBottom: 12, textAlign: 'center'}}>{this.props.hoverLabel}</Text>
+  }
+
   _renderThumb(thumbTintColor, mainStyles, thumbLeft, thumbStyle, valueVisibleStyle) {
     if (this.props.hideThumb) {
       return null;
@@ -575,7 +594,8 @@ export default class Slider extends PureComponent {
             },
           ]}
         >
-          {this._renderThumbImage()}
+          {this._renderHoverLabel()}
+          {this._renderThumbComponent()}
         </Animated.View>
       );
     }
@@ -598,12 +618,16 @@ export default class Slider extends PureComponent {
     };
   };
 
-  _renderThumbImage = () => {
-    const { thumbImage } = this.props;
+  _renderThumbComponent = () => {
+    const { thumbImage, thumbComponent } = this.props;
 
-    if (!thumbImage) return;
-
-    return <Image source={thumbImage} />;
+    if (thumbImage) {
+      return <Image source={thumbImage} />;
+    } else if (thumbComponent) {
+      return thumbComponent;
+    } else {
+      return;
+    }
   };
 }
 
